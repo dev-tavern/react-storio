@@ -11,16 +11,20 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
+    "prebuild": "rm -rf dist",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc.cjs"
   },
+  "dependencies": {
+    "use-context-selector": "^1.4.1"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
-    "@rollup/plugin-typescript": "^8.3.4",
+    "@rollup/plugin-typescript": "^8.3.3",
     "@types/react": "^18.0.17",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.33.1",
@@ -32,8 +36,24 @@
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "rollup": "^2.78.1",
+    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": "*",
+    "react-native": "*",
+    "scheduler": ">=0.19.0"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    }
   },
   "keywords": [
     "react",
