@@ -36,5 +36,3 @@ export function StoreContextProvider({ useStores, children }: StoreContextProvid
     return null
   }
 }
-
-// export default StoreContextProvider
