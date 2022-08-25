@@ -26,13 +26,17 @@ const _get =
 
 /**
  * Creates a `useStore` hook which allows for interaction with a defined store.
+ * @param id - unique identifier for the store
  * @param options - options to define the store (state, getters, actions)
+ * @returns
  */
 export function defineStore<Id extends string, S, G, A extends _ActionsTree>(
-  options: DefineStoreOptions<Id, S, G, A>
+  id: Id,
+  options: Omit<DefineStoreOptions<Id, S, G, A>, 'id'>
 ): UseStore<Id, S, G, A> {
-  let _state = options.state()
-  const storeKeysContext = getStoreKeysContext(options)
+  const storeOptions: DefineStoreOptions<Id, S, G, A> = Object.assign(options, { id })
+  let _state = storeOptions.state()
+  const storeKeysContext = getStoreKeysContext(storeOptions)
   const storeStateContext = createContext<[S, React.Dispatch<_DeepPartial<S>>]>([
     _state,
     () => null,
@@ -50,17 +54,17 @@ export function defineStore<Id extends string, S, G, A extends _ActionsTree>(
   }
   const useValue = () => useReducer(patchReducer, _state)
 
-  validateStoreOption(options, storeKeysContext)
+  validateStoreOption(storeOptions, storeKeysContext)
 
   const useStoreFn = () => {
     const store = {
-      $id: options.id,
+      $id: storeOptions.id,
       $context: storeStateContext,
       $useValue: useValue,
       get: _get(storeStateContext),
       set: useContextSelector(storeStateContext, (v) => v[1]),
     } as Store<Id, S, G, A>
-    return getStoreProxy(store, options, storeKeysContext, getState)
+    return getStoreProxy(store, storeOptions, storeKeysContext, getState)
   }
 
   useStoreFn.$context = storeStateContext
